@@ -60,7 +60,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: eslint ~/repo --ext .js,.ts
+      - run: npx eslint ~/repo --ext .js,.ts
 
   security-check:
     <<: *defaults
