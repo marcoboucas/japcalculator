@@ -60,8 +60,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: cd ~/repo
-      - run: yarn lint
+      - run: cd ~/repo && yarn lint
 
   security-check:
     <<: *defaults
