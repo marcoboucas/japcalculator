@@ -34,11 +34,18 @@ jobs:
         - image: circleci/node:12
     steps:
       - checkout
-      - run: yarn audit
+      - run: yarn audit --sumary
+
+  lint:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run: npx eslint .
 
 workflows:
   node-tests:
     jobs:
       - build-test
       - check-audit
-      
+      - lint
