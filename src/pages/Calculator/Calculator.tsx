@@ -82,6 +82,9 @@ export const CalculatorPage: React.FC<Props> = (props: Props) => {
               {result} Kcal
             </Button>
           </div>
+          <div>
+            <h3>Equivalent perle de coco : {Math.round(2500-result)}</h3>
+          </div>
         </div>
         <div className={classes.lateralBar}>
           <div className={classes.barSpacer} />
