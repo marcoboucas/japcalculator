@@ -67,7 +67,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: yarn audit --summary
+      - run: yarn audit --summary || exit_code=0
       - run: npx yarn-audit-fix
 
 
