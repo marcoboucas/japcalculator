@@ -26,7 +26,7 @@ jobs:
 
       # run tests!
       - run: yarn test
-      - run: yarn build-test
+      - run: yarn build
 
   check-audit:
     docker:
@@ -38,8 +38,12 @@ jobs:
 workflows:
   node-tests:
     jobs:
-      - build-test
-      - check-audit:
+      - build-test:
           requires:
-            - build-test
+            - hold
+      - hold:
+          type: approval
+          requires:
+            - check-audit
+      - check-audit
       
