@@ -1,10 +1,29 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    # specify the version you desire here
+    - image: circleci/node:12
+
+whitelist: &whitelist
+  paths:
+    - .npmignore
+    - coverage/*
+    - dist/*
+    - node_modules/*
+    - src/*
+    - test/*
+    - CODE_OF_CONDUCT.md
+    - LICENSE.md
+    - package.json
+    - README.md
+    - tsconfig.json
+    - tslint.json
+
 version: 2.1
 jobs:
  
-  build-test:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:12
+  checkout:
+    <<: *defaults
 
     steps:
       - checkout
@@ -23,29 +42,56 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+        
+      - persist_to_workspace:
+          root: ~/repo
+          <<: *whitelist
 
-      # run tests!
-      - run: yarn test
-      - run: yarn build
-
-  check-audit:
-    docker:
-        # specify the version you desire here
-        - image: circleci/node:12
+  
+  test:
+    <<: *defaults
     steps:
-      - checkout
-      - run: yarn audit --sumary
+      - attach_workspace:
+          at: ~/repo
+      - run: yarn test
 
   lint:
-    docker:
-      - image: circleci/node:12
+    <<: *defaults
     steps:
-      - checkout
-      - run: npx eslint .
+      - attach_workspace:
+          at: ~/repo
+      - run: yarn run lint
+
+  security-check:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: yarn audit --summary
+
+
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: yarn build
 
 workflows:
   node-tests:
     jobs:
-      - build-test
-      - check-audit
-      - lint
+      - checkout
+      - security-check:
+          requires:
+            - checkout
+      - test:
+          requires:
+            - checkout
+      - lint:
+          requires:
+            - checkout
+      - build:
+          requires:
+            - checkout
+            - lint
+            - test
