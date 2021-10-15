@@ -39,8 +39,6 @@ jobs:
 workflows:
   node-tests:
     jobs:
-      - build-test:
-          requires:
-            - check-audit
+      - build-test
       - check-audit
       
