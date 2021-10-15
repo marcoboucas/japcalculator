@@ -35,14 +35,11 @@ jobs:
     steps:
       - checkout
       - run: yarn audit
+
 workflows:
   node-tests:
     jobs:
       - build-test:
-          requires:
-            - hold
-      - hold:
-          type: approval
           requires:
             - check-audit
       - check-audit
