@@ -1,5 +1,6 @@
 version: 2.1
 jobs:
+ 
   build-test:
     docker:
       # specify the version you desire here
@@ -25,9 +26,20 @@ jobs:
 
       # run tests!
       - run: yarn test
-      - run: yarn build
+      - run: yarn build-test
 
+  check-audit:
+    docker:
+        # specify the version you desire here
+        - image: circleci/node:12
+    steps:
+      - checkout
+      - run: yarn audit
 workflows:
   node-tests:
     jobs:
       - build-test
+      - check-audit:
+          requires:
+            - build-test
+      
