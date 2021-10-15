@@ -83,7 +83,7 @@ export const CalculatorPage: React.FC<Props> = (props: Props) => {
             </Button>
           </div>
           <div>
-            <h3>Equivalent perle de coco : {Math.round((2500-result)/225}</h3>
+            <h3>Equivalent perle de coco : {Math.round((2500-result)/225)}</h3>
           </div>
         </div>
         <div className={classes.lateralBar}>
